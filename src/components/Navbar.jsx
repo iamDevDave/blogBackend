@@ -23,7 +23,7 @@ const NavBar = () => {
             MyApp
           </a>
           <div className="flex items-center space-x-4">
-            <Link to="/" className="hover:text-gray-400">
+            <Link to="/allBlogs" className="hover:text-gray-400">
               Home
             </Link>
             <Link to="/login" className="hover:text-gray-400">

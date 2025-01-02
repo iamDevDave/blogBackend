@@ -27,7 +27,7 @@ const App = () => {
           <Routes>
             <Route path="/allBlogs" element={<AllBlogs token={token} />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
         </div>
       </div>
