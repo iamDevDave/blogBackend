@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
 
 const CreateModal = ({ onClose, onCreate }) => {
   const [title, setTitle] = useState('');
@@ -53,64 +57,67 @@ const CreateModal = ({ onClose, onCreate }) => {
   };
 
   return (
-    <div className="modal" style={{ display: 'block' }}>
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Create New Blog Post</h5>
-            <button type="button" className="close" onClick={onClose}>
-              <span>&times;</span>
-            </button>
+    <Dialog open onOpenChange={onClose}>
+      <DialogTrigger asChild>
+        {/* Trigger button to open modal, but will be hidden since modal is always open */}
+        <div />
+      </DialogTrigger>
+      
+      <DialogContent className="max-w-3xl p-6 bg-white rounded-lg shadow-lg">
+        <DialogHeader>
+          <DialogTitle>Create New Blog Post</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="title" className="text-sm font-semibold text-gray-700">Title</label>
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full"
+            />
           </div>
-          <div className="modal-body">
-            <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                id="title"
-                className="form-control"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="form-group mt-2">
-              <label htmlFor="content">Content</label>
-              <textarea
-                id="content"
-                className="form-control"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows="4"
-              />
-            </div>
-            <div className="form-group mt-2">
-              <label htmlFor="tags">Tags (comma separated)</label>
-              <input
-                type="text"
-                id="tags"
-                className="form-control"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-              />
-            </div>
-            <div className="form-group mt-2">
-              <label htmlFor="images">Upload Images</label>
-              <input
-                type="file"
-                id="images"
-                className="form-control"
-                multiple
-                onChange={handleFileChange}
-              />
-            </div>
+
+          <div className="space-y-2">
+            <label htmlFor="content" className="text-sm font-semibold text-gray-700">Content</label>
+            <Textarea
+              id="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="w-full"
+              rows="4"
+            />
           </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
-            <button type="button" className="btn btn-primary" onClick={handleCreate}>Create</button>
+
+          <div className="space-y-2">
+            <label htmlFor="tags" className="text-sm font-semibold text-gray-700">Tags (comma separated)</label>
+            <Input
+              id="tags"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="images" className="text-sm font-semibold text-gray-700">Upload Images</label>
+            <input
+              type="file"
+              id="images"
+              className="w-full border border-gray-300 rounded-md p-2"
+              multiple
+              onChange={handleFileChange}
+            />
           </div>
         </div>
-      </div>
-    </div>
+
+        <DialogFooter className="space-x-2 mt-4">
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={handleCreate}>Create</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

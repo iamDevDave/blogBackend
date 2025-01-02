@@ -1,4 +1,6 @@
 import React from 'react';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../components/ui/dialog';
+import { Button } from '../components/ui/button';
 
 const DeleteBlogModal = ({ blogId, onClose, onDelete }) => {
 
@@ -32,29 +34,22 @@ const DeleteBlogModal = ({ blogId, onClose, onDelete }) => {
   };
 
   return (
-    <div className="modal" style={{ display: 'block' }}>
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Confirm Deletion</h5>
-            <button type="button" className="close" onClick={onClose}>
-              <span>&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <p>Are you sure you want to delete this blog?</p>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="button" className="btn btn-danger" onClick={handleDelete}>
-              Delete
-            </button>
-          </div>
+    <Dialog open onOpenChange={onClose}>
+      <DialogContent className="max-w-lg p-6 bg-white rounded-lg shadow-lg">
+        <DialogHeader>
+          <DialogTitle>Confirm Deletion</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          <p className="text-sm text-gray-700">Are you sure you want to delete this blog?</p>
         </div>
-      </div>
-    </div>
+
+        <DialogFooter className="space-x-4 mt-4">
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

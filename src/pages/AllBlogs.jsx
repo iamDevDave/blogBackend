@@ -54,11 +54,11 @@ const AllBlogs = () => {
   };
 
   return (
-    <div>
-      <h2>All Blogs</h2>
-      <div className="row">
+    <div className="p-6 space-y-4">
+      <h2 className="text-2xl font-bold mb-4">All Blogs</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {blogs.map((blog) => (
-          <div key={blog._id} className="col-md-4">
+          <div key={blog._id}>
             <BlogCard
               blog={blog}
               onEdit={() => openEditModal(blog)}

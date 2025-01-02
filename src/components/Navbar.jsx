@@ -1,38 +1,46 @@
-import React, { useState } from 'react';
-import { Navbar, Nav, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';  // Import useNavigate instead of useHistory
-import CreateModal from '../models/CreateModal'; // Import CreateModal component
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../App.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import CreateModal from "../models/CreateModal"; // Import CreateModal component
 
 const NavBar = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to handle modal visibility
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const openCreateModal = () => {
-    setIsModalOpen(true); // Open the create modal when the button is clicked
+    setIsModalOpen(true);
   };
 
   const closeCreateModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false);
   };
 
   return (
     <>
-      <Navbar expand="lg" className="navbar position-sticky top-0">
-        <Navbar.Brand href="/" className="text-white">MyApp</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ml-auto">
-            <Nav.Link as={Link} to="/" className="text-white">Home</Nav.Link>
-            <Nav.Link as={Link} to="/login" className="text-white">Login</Nav.Link>
-            <Nav.Link as={Link} to="/allBlogs" className="text-white">All Blogs</Nav.Link>
-            <Button variant="primary" className="ml-2" onClick={openCreateModal}>
+      <nav className="bg-gray-800 text-white p-4 sticky top-0 z-10">
+        <div className="flex justify-between items-center">
+          <a href="/" className="text-xl font-bold">
+            MyApp
+          </a>
+          <div className="flex items-center space-x-4">
+            <Link to="/" className="hover:text-gray-400">
+              Home
+            </Link>
+            <Link to="/login" className="hover:text-gray-400">
+              Login
+            </Link>
+            <Link to="/signup" className="hover:text-gray-400">
+              Signup
+            </Link>
+            <Link to="/allBlogs" className="hover:text-gray-400">
+              All Blogs
+            </Link>
+            <Button onClick={openCreateModal} className="bg-blue-500 hover:bg-blue-600">
               Create
             </Button>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+          </div>
+        </div>
+      </nav>
 
       {/* Conditionally render CreateModal */}
       {isModalOpen && <CreateModal onClose={closeCreateModal} onCreate={(newBlogPost) => console.log(newBlogPost)} />}

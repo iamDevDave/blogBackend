@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/Navbar'; 
 import AllBlogs from './pages/AllBlogs';
 import Login from './pages/Login';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Signup from './pages/Signup';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('token')); // Set token from localStorage on page load
@@ -26,6 +27,7 @@ const App = () => {
           <Routes>
             <Route path="/allBlogs" element={<AllBlogs token={token} />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/signup" element={<Signup onLogin={handleLogin} />} />
           </Routes>
         </div>
       </div>
