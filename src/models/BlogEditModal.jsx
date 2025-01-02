@@ -50,11 +50,11 @@ const EditBlogModal = ({ blogId, currentTitle, currentContent, onClose, onUpdate
 
   return (
     <Dialog open onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-w-7xl p-12">
         <DialogHeader>
           <DialogTitle>Edit Blog</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-8">
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700">
               Title
@@ -64,7 +64,7 @@ const EditBlogModal = ({ blogId, currentTitle, currentContent, onClose, onUpdate
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 w-full"
+              className="mt-1 w-full py-4 px-6 border-2 border-gray-300 rounded-md text-lg"
             />
           </div>
           <div>
@@ -75,16 +75,18 @@ const EditBlogModal = ({ blogId, currentTitle, currentContent, onClose, onUpdate
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              rows="4"
-              className="mt-1 w-full"
+              rows="8"
+              className="mt-1 w-full py-4 px-6 border-2 border-gray-300 rounded-md text-lg"
             />
           </div>
         </div>
-        <DialogFooter className="space-x-2 mt-4">
-          <Button variant="secondary" onClick={onClose}>
+        <DialogFooter className="space-x-6 mt-8">
+          <Button variant="secondary" onClick={onClose} className="px-8 py-3 text-lg">
             Cancel
           </Button>
-          <Button onClick={handleUpdate}>Update</Button>
+          <Button onClick={handleUpdate} className="px-8 py-3 text-lg">
+            Update
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

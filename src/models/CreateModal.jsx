@@ -63,58 +63,62 @@ const CreateModal = ({ onClose, onCreate }) => {
         <div />
       </DialogTrigger>
       
-      <DialogContent className="max-w-3xl p-6 bg-white rounded-lg shadow-lg">
+      <DialogContent className="max-w-7xl p-12 bg-white rounded-lg shadow-lg">
         <DialogHeader>
           <DialogTitle>Create New Blog Post</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="space-y-2">
+        <div className="space-y-8">
+          <div className="space-y-4">
             <label htmlFor="title" className="text-sm font-semibold text-gray-700">Title</label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full"
+              className="w-full py-4 px-6 border-2 border-gray-300 rounded-md text-lg"
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4">
             <label htmlFor="content" className="text-sm font-semibold text-gray-700">Content</label>
             <Textarea
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="w-full"
-              rows="4"
+              className="w-full py-4 px-6 border-2 border-gray-300 rounded-md text-lg"
+              rows="6"
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4">
             <label htmlFor="tags" className="text-sm font-semibold text-gray-700">Tags (comma separated)</label>
             <Input
               id="tags"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="w-full"
+              className="w-full py-4 px-6 border-2 border-gray-300 rounded-md text-lg"
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-4">
             <label htmlFor="images" className="text-sm font-semibold text-gray-700">Upload Images</label>
             <input
               type="file"
               id="images"
-              className="w-full border border-gray-300 rounded-md p-2"
+              className="w-full border border-gray-300 rounded-md p-4 text-lg"
               multiple
               onChange={handleFileChange}
             />
           </div>
         </div>
 
-        <DialogFooter className="space-x-2 mt-4">
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleCreate}>Create</Button>
+        <DialogFooter className="space-x-6 mt-8">
+          <Button variant="outline" onClick={onClose} className="px-8 py-3 text-lg">
+            Cancel
+          </Button>
+          <Button onClick={handleCreate} className="px-8 py-3 text-lg">
+            Create
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
