@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/slices/authSlice'; // Redux slice
 import { Button } from '../components/ui/button'; // ShadCN UI Button Component
 import { Input } from '../components/ui/input'; // ShadCN UI Input Component
 import Alert from '../components/ui/Alert'; // Correct import for Alert Component
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,9 +28,9 @@ const Login = ({ onLogin }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Store the JWT token in localStorage
-        localStorage.setItem('token', data.token);
-        onLogin(data.token); // Call the parent onLogin function to notify the parent component
+        // Dispatch the login action with the token
+        dispatch(login(data.token));
+        navigate('/'); // Redirect to the dashboard or homepage
       } else {
         setError(data.message || 'Login failed');
       }

@@ -3,12 +3,15 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
+import { useDispatch } from 'react-redux';
+import { createBlog, fetchBlogs } from '../redux/slices/blogsSlice'; // Import actions
 
-const CreateModal = ({ onClose, onCreate }) => {
+const CreateModal = ({ onClose }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
   const [images, setImages] = useState([]);
+  const dispatch = useDispatch(); // Initialize Redux dispatch
 
   const handleFileChange = (e) => {
     setImages([...e.target.files]);
@@ -45,7 +48,12 @@ const CreateModal = ({ onClose, onCreate }) => {
 
       if (response.ok) {
         alert(data.message);
-        onCreate(data.newBlogPost); // Pass the new blog post data to parent
+        // Dispatch the createBlog action to update Redux store (optional)
+        dispatch(createBlog(data.newBlogPost));
+
+        // Dispatch fetchBlogs action to reload the blogs after creation
+        dispatch(fetchBlogs());
+
         onClose(); // Close the modal after creation
       } else {
         alert('Error creating blog post: ' + data.message);

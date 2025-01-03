@@ -1,11 +1,15 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
-import CreateModal from "../models/CreateModal"; // Import CreateModal component
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from './ui/button';
+import CreateModal from '../models/CreateModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
 
 const NavBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
 
   const openCreateModal = () => {
     setIsModalOpen(true);
@@ -13,6 +17,11 @@ const NavBar = () => {
 
   const closeCreateModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
   };
 
   return (
@@ -26,12 +35,20 @@ const NavBar = () => {
             <Link to="/allBlogs" className="hover:text-gray-400">
               Home
             </Link>
-            <Link to="/login" className="hover:text-gray-400">
-              Login
-            </Link>
-            <Link to="/signup" className="hover:text-gray-400">
-              Signup
-            </Link>
+            {!token ? (
+              <>
+                <Link to="/login" className="hover:text-gray-400">
+                  Login
+                </Link>
+                <Link to="/signup" className="hover:text-gray-400">
+                  Signup
+                </Link>
+              </>
+            ) : (
+              <Button onClick={handleLogout} className="bg-red-500 hover:bg-red-600">
+                Logout
+              </Button>
+            )}
             <Link to="/allBlogs" className="hover:text-gray-400">
               All Blogs
             </Link>
@@ -42,7 +59,6 @@ const NavBar = () => {
         </div>
       </nav>
 
-      {/* Conditionally render CreateModal */}
       {isModalOpen && <CreateModal onClose={closeCreateModal} onCreate={(newBlogPost) => console.log(newBlogPost)} />}
     </>
   );

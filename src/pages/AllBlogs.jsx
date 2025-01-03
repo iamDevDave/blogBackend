@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import BlogCard from '../components/BlogCard';  // Your BlogCard component
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBlogs, updateBlog, deleteBlog } from '../redux/slices/blogsSlice';
+import BlogCard from '../components/BlogCard';
 import EditBlogModal from '../models/BlogEditModal';
-import DeleteBlogModal from '../models/DeleteBlogModal';  // The DeleteBlogModal component
+import DeleteBlogModal from '../models/DeleteBlogModal';
 
 const AllBlogs = () => {
-  const [blogs, setBlogs] = useState([]);
+  const { blogs, status, error } = useSelector((state) => state.blogs);
+  const dispatch = useDispatch();
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [blogToEdit, setBlogToEdit] = useState(null);
   const [blogToDelete, setBlogToDelete] = useState(null);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      const response = await fetch('http://localhost:5000/api/blogposts', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = await response.json();
-      setBlogs(data);
-    };
-
-    fetchBlogs();
-  }, []);
+    if (status === 'idle') {
+      dispatch(fetchBlogs());
+    }
+  }, [status, dispatch]);
 
   const openEditModal = (blog) => {
     setBlogToEdit(blog);
@@ -43,30 +37,34 @@ const AllBlogs = () => {
     setBlogToDelete(null);
   };
 
-  const handleUpdateBlog = (updatedBlog) => {
-    setBlogs((prevBlogs) => 
-      prevBlogs.map((blog) => (blog._id === updatedBlog._id ? updatedBlog : blog))
-    );
+  const handleUpdateBlog = async (updatedBlog) => {
+    await dispatch(updateBlog(updatedBlog));
+    closeModals();
   };
 
-  const handleDeleteBlog = (deletedBlogId) => {
-    setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== deletedBlogId));
+  const handleDeleteBlog = async () => {
+    await dispatch(deleteBlog(blogToDelete));
+    closeModals();
   };
 
   return (
     <div className="p-6 space-y-4">
       <h2 className="text-2xl font-bold mb-4">All Blogs</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs.map((blog) => (
-          <div key={blog._id}>
-            <BlogCard
-              blog={blog}
-              onEdit={() => openEditModal(blog)}
-              onDelete={() => openDeleteModal(blog._id)}
-            />
-          </div>
-        ))}
-      </div>
+      {status === 'loading' && <p>Loading...</p>}
+      {status === 'failed' && <p>Error: {error}</p>}
+      {status === 'succeeded' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogs.map((blog) => (
+            <div key={blog._id}>
+              <BlogCard
+                blog={blog}
+                onEdit={() => openEditModal(blog)}
+                onDelete={() => openDeleteModal(blog._id)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Edit Modal */}
       {isEditModalOpen && blogToEdit && (

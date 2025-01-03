@@ -3,10 +3,13 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../components/ui/dialog";
+import { useDispatch } from 'react-redux';
+import { updateBlog, fetchBlogs } from '../redux/slices/blogsSlice';  // Import the necessary actions
 
-const EditBlogModal = ({ blogId, currentTitle, currentContent, onClose, onUpdate }) => {
+const EditBlogModal = ({ blogId, currentTitle, currentContent, onClose }) => {
   const [title, setTitle] = useState(currentTitle);
   const [content, setContent] = useState(currentContent);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setTitle(currentTitle);
@@ -22,26 +25,21 @@ const EditBlogModal = ({ blogId, currentTitle, currentContent, onClose, onUpdate
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/blogposts/update/${blogId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Include the token in the header
-        },
-        body: JSON.stringify({
-          title,
-          content,
-        }),
-      });
+      const updatedBlog = {
+        _id: blogId,
+        title,
+        content,
+        token,
+      };
 
-      const data = await response.json();
+      // Dispatch the updateBlog action
+      await dispatch(updateBlog(updatedBlog));
 
-      if (response.ok) {
-        onUpdate(data); // Pass updated blog data to parent component
-        onClose(); // Close the modal after update
-      } else {
-        alert("Error updating blog.");
-      }
+      // Dispatch the fetchBlogs action to refresh the content
+      dispatch(fetchBlogs());
+
+      // Close the modal after update
+      onClose();
     } catch (error) {
       console.error("Error:", error);
       alert("Something went wrong while updating the blog.");
