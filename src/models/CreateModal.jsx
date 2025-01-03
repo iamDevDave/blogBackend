@@ -5,16 +5,17 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { useDispatch } from 'react-redux';
 import { createBlog, fetchBlogs } from '../redux/slices/blogsSlice'; // Import actions
+import { WithContext as ReactTags, SEPARATORS } from 'react-tag-input'; // Import ReactTags
 
 const CreateModal = ({ onClose }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
+  const [tags, setTags] = useState([]); // Initialize tags as an empty array
   const [images, setImages] = useState([]);
   const dispatch = useDispatch(); // Initialize Redux dispatch
 
   const handleFileChange = (e) => {
-    setImages([...e.target.files]);
+    setImages([...e.target.files]); // Handle multiple image files
   };
 
   const handleCreate = async () => {
@@ -28,7 +29,7 @@ const CreateModal = ({ onClose }) => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('tags', tags);
+    formData.append('tags', tags.map(tag => tag.text).join(',')); // Send tags as comma-separated string
 
     // Append images to the form data
     for (let i = 0; i < images.length; i++) {
@@ -62,6 +63,10 @@ const CreateModal = ({ onClose }) => {
       console.error('Error:', error);
       alert('Something went wrong while creating the blog post.');
     }
+  };
+
+  const handleTagChange = (newTags) => {
+    setTags(newTags); // Ensure tag changes update the state
   };
 
   return (
@@ -99,12 +104,28 @@ const CreateModal = ({ onClose }) => {
           </div>
 
           <div className="space-y-4">
-            <label htmlFor="tags" className="text-sm font-semibold text-gray-700">Tags (comma separated)</label>
-            <Input
-              id="tags"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              className="w-full py-4 px-6 border-2 border-gray-300 rounded-md text-lg"
+            <label htmlFor="tags" className="text-sm font-semibold text-gray-700">Tags</label>
+
+            {/* ReactTags for Tagging */}
+            <ReactTags
+              tags={tags}
+              handleDelete={(i) => setTags(tags.filter((tag, index) => index !== i))}
+              handleAddition={(tag) => setTags([...tags, tag])}
+              handleDrag={(tag, currPos, newPos) => {
+                const newTags = [...tags];
+                newTags.splice(currPos, 1);
+                newTags.splice(newPos, 0, tag);
+                setTags(newTags);
+              }}
+              inputFieldPosition="bottom"
+              placeholder="Add tags and press Enter"
+              separators={[SEPARATORS.TAB, SEPARATORS.SPACE, SEPARATORS.COMMA]}
+              handleTagChange={handleTagChange}
+              classNames={{
+                tagInputField: "w-full py-2 px-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+                tag: "inline-flex items-center px-4 py-2 text-sm bg-blue-100 rounded-full text-blue-600 font-semibold mb-4",
+                remove: "ml-2 cursor-pointer text-blue-500 hover:text-blue-700"
+              }}
             />
           </div>
 
